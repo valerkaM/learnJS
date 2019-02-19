@@ -14,6 +14,8 @@ window.addEventListener('DOMContentLoaded', () =>{
     function openCart() {
         cart.style.display = 'block';
         document.body.style.overflow = 'hidden';
+
+        calcTotal();
     }
 
     function closeCart() {
@@ -33,16 +35,74 @@ window.addEventListener('DOMContentLoaded', () =>{
 
             trigger.remove();
 
+            showConfirm();
+
             removeBtn.classList.add('goods__item-remove');
             removeBtn.innerHTML = '&times';
             item.appendChild(removeBtn);
 
             cartWrapper.appendChild(item);
 
+            calcGoods();
+
             if (empty){
                 empty.remove();
             }
+
+            removeFromCart();
         });
     });
+
+    function sliceTitle() {
+        titles.forEach((item) => {
+            if (item.textContent.length < 70) {
+                return;
+            }
+            const str = item.textContent.slice(0, 71) + '...';
+            item.textContent = str;
+        });  
+    }
+
+    sliceTitle();
+
+    function showConfirm() {
+        confirm.style.display = 'block';
+        let counter = 100;
+        const id = setInterval(frame, 10);
+        function frame() {
+            if ( counter == 10 ) {
+                clearInterval(id);
+            } else {
+                counter--;
+                confirm.style.transform = `translateY(-${counter}px`;
+                confirm.style.opacity = '.' + counter;
+            }
+        }
+    }
+
+    function calcGoods() {
+        const items = cartWrapper.querySelectorAll('.goods__item');
+        badge.textContent = items.length;
+    }
+
+    function calcTotal() {
+        const prices = document.querySelectorAll('.cart__wrapper > .goods__item > .goods__price > span');
+        let total = 0;
+        prices.forEach((item) => {
+            total += +item.textContent;
+        });
+        totalCost.textContent = total;
+    }
+
+    function removeFromCart() {
+        const removeBtn = cartWrapper.querySelectorAll('.goods__item-remove');
+        removeBtn.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.remove();
+                calcGoods();
+                calcTotal();
+            });
+        });
+    }
 
 });
