@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () =>{
             calcGoods();
 
             if (empty){
-                empty.remove();
+                empty.style.display = 'none';
             }
 
             removeFromCart();
@@ -101,6 +101,12 @@ window.addEventListener('DOMContentLoaded', () =>{
                 btn.parentElement.remove();
                 calcGoods();
                 calcTotal();
+
+                const cartTotal = cartWrapper.querySelectorAll('.goods__item-remove');
+                if ( cartTotal.length == 0 ) {
+                    let empty = cartWrapper.querySelector('.empty');
+                    empty.style.display = 'block';
+                }
             });
         });
     }
