@@ -1,4 +1,7 @@
 window.addEventListener('DOMContentLoaded', () =>{
+    
+    const   goodsNumb = 4;
+    let     goodsView = 4;
 
     const loadContent = async (url, callback) => {
         await fetch(url)
@@ -10,8 +13,8 @@ window.addEventListener('DOMContentLoaded', () =>{
     
     function createElement(arr) {
         const goodsWrapper = document.querySelector('.goods__wrapper');
-    
-        arr.forEach((item) => {
+
+        arr.forEach((item, num) => {
             let card = document.createElement('div');
             card.classList.add('goods__item');
             card.innerHTML = `
@@ -25,6 +28,9 @@ window.addEventListener('DOMContentLoaded', () =>{
                 </div>
                 <button class="goods__btn">Добавить в корзину</button>
             `;
+
+            if(num >= goodsView) card.style.display = 'none';
+
             goodsWrapper.appendChild(card);
         });
     }
@@ -39,7 +45,8 @@ window.addEventListener('DOMContentLoaded', () =>{
                 confirm = document.querySelector('.confirm'),
                 badge = document.querySelector('.nav__badge'),
                 totalCost = document.querySelector('.cart__total > span'),
-                titles = document.querySelectorAll('.goods__title');
+                titles = document.querySelectorAll('.goods__title'),
+                moreBtn = document.querySelector('.goods__btn-more');
     
         function openCart() {
             cart.style.display = 'block';
@@ -141,5 +148,18 @@ window.addEventListener('DOMContentLoaded', () =>{
                 });
             });
         }
+
+        moreBtn.addEventListener('click', () => {
+
+            goodsView = goodsNumb + goodsView < products.length ? goodsNumb + goodsView : products.length;
+
+            for (let index = goodsView - goodsNumb; index < goodsView; index++) {
+                products[index].style.display = 'block';
+            }
+
+            if(goodsView == products.length) {
+                moreBtn.style.display = 'none';
+            }
+        });
     });
 });
